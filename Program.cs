@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -72,18 +73,24 @@ namespace mysql
             reader.Close();
             //foreach (var item in employees)
             //{
-                //Console.WriteLine($"{item.id} | {item.firstname} | {item.lastname} | {item.email}");
+            //Console.WriteLine($"{item.id} | {item.firstname} | {item.lastname} | {item.email}");
             //}
             //foreach(var item2 in products)
             //{
-                //Console.WriteLine($"{item2.name} | {item2.type} | {item2.quantity} | {item2.price}");
+            //Console.WriteLine($"{item2.name} | {item2.type} | {item2.quantity} | {item2.price}");
             //}
 
             //1. feladat: Hány darab elem van a listában
-            Console.WriteLine($"1. feladat: Ennyi {products.Count()} darab termék van");
+
+            Console.WriteLine("\n------------------------------------\n");
+
+
+            Console.WriteLine($"1. feladat : Ennyi {products.Count()} darab termék van");
+
+            Console.WriteLine("\n------------------------------------\n");
 
             //2. feladat: Típusonként hány darab van
-            Console.WriteLine("2. feladat: Típusonként hány darab van");
+            Console.WriteLine("2. feladat : Típusonként hány darab van");
             //LinQ-s
             var darab_linq = (
                 from sor in products
@@ -116,7 +123,7 @@ namespace mysql
             {
                 foreach (var item in tipus_linq)
                 {
-                    Console.WriteLine($"{item.name} | {item.price:.}$ | {item.type}");
+                    Console.WriteLine($"\t{item.name} | {item.price:.}$ | {item.type}");
                 }
             }
             else
@@ -133,7 +140,7 @@ namespace mysql
             //{
             //foreach (var item in tipus_linq)
             //{
-            //Console.WriteLine($"{item.name} | {item.price:.}$ | {item.type}");
+            //Console.WriteLine($"\t{item.name} | {item.price:.}$ | {item.type}");
             //}
             //}
             //else
@@ -156,33 +163,81 @@ namespace mysql
             {
             foreach (var item in cars_linq)
             {
-            Console.WriteLine($"{item.name} | {item.price:.}$ | {item.type}");
+            Console.WriteLine($"\t{item.name} | {item.price:.}$ | {item.type}");
             }
             }
             else
             {
-            Console.WriteLine("Nincsenek ilyen típusok");
+            Console.WriteLine("\tNincsenek ilyen típus/típusok");
             }
 
             //Lambda-s
             //var cars_lambda = products.Where(x => x.type.EndsWith("Cars"));
-            
+
             //if (cars_lambda.Any())
             //{
-                //foreach (var item in cars_lambda)
-                //{
-                    //Console.WriteLine($"{item.name} | {item.price:.}$ | {item.type}");
-                //}
+            //foreach (var item in cars_lambda)
+            //{
+            //Console.WriteLine($"\t{item.name} | {item.price:.}$ | {item.type}");
+            //}
             //}
             //else
             //{
-                //Console.WriteLine("Nincsenek ilyen típusok");
+            //Console.WriteLine("Nincsenek ilyen típusok");
             //}
 
+            Console.WriteLine("\n------------------------------------\n");
 
+            //5. feladat: Legdrágább típus adatai 
+            var legdragabb = (
+                from sor in products
+                orderby sor.price
+                select sor
+            ).Last();
+            Console.WriteLine($"5. feladat : Legdrágább típus:\n\t{legdragabb.name} | {legdragabb.price:.$} | {legdragabb.type}");
 
-            //6. feladat: Típusonként legdrágábbak adatai
+            Console.WriteLine("\n------------------------------------\n");
 
+            //6. feladat: Legdrágább típusok adatai 
+            Console.WriteLine($"6. feladat : A legdrágább típusok");
+
+            Double max = (
+                from sor in products
+                select sor.price
+            ).Max();
+
+            var legdragabbak = (
+                from sor in products
+                where sor.price == max
+                select sor
+            );
+            if (legdragabbak.Any())
+            {
+                foreach (var item in legdragabbak)
+                {
+                    Console.WriteLine($"\t{item.name} | {item.price:.}$ | {item.type}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("\tNincs több ugyanolyan árú autó");
+            }
+
+            Console.WriteLine("\n------------------------------------\n");
+
+            //7. feladat : Minden típusból a legdrágább autó
+
+            Console.WriteLine("7. feladat: Minden típusból a legdrágább autó:");
+            var minden_legdragabb = (
+                from sor in products
+                orderby sor.price
+                group sor.price by sor.type
+            );
+            foreach(var item in minden_legdragabb)
+            {
+                Console.WriteLine($"\t{item.Key} | {item.Max()}");
+            }
+            
             Console.ReadKey();
         }
     }
