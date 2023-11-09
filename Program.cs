@@ -84,10 +84,10 @@ namespace mysql
 
             Console.WriteLine("\n------------------------------------\n");
 
-
-            Console.WriteLine($"1. feladat : Ennyi {products.Count()} darab termék van");
+            Console.WriteLine($"1. feladat : {products.Count()} darab termék van a listában");
 
             Console.WriteLine("\n------------------------------------\n");
+
 
             //2. feladat: Típusonként hány darab van
             Console.WriteLine("2. feladat : Típusonként hány darab van");
@@ -101,11 +101,12 @@ namespace mysql
                 Console.WriteLine($"\t{item.Key} | {item.Count()}");
             }
             //Lambda-s
-            var darab_lambda = products.GroupBy(x => x.type);
-            foreach (var item in darab_lambda)
-            {
-                Console.WriteLine($"\t{item.Key} | {item.Count()}");
-            }
+            //var darab_lambda = products.GroupBy(x => x.type);
+            //foreach (var item in darab_lambda)
+            //{
+            //Console.WriteLine($"\t{item.Key} | {item.Count()}");
+            //}
+            Console.ResetColor();
 
             Console.WriteLine("\n------------------------------------\n");
 
@@ -237,7 +238,30 @@ namespace mysql
             {
                 Console.WriteLine($"\t{item.Key} | {item.Max()}");
             }
-            
+
+            Console.WriteLine("\n------------------------------------\n");
+
+            //8. feladat : Hány darab típus van
+            //Linq-s
+            var dis_linq = (
+                from sor in products
+                select sor.type
+            ).Distinct();
+
+            Console.WriteLine($"8. feladat : {dis_linq.Count()} darab típus van. Ezek az alábbiak:");
+            foreach (var item in dis_linq)
+            {
+                Console.WriteLine($"\t{item}");
+            }
+
+            //Lambda-s
+            //var dis_lambda = products.Select(x => x.type).Distinct();
+            //Console.WriteLine($"8. feladat : {dis_lambda.Count()} darab típus van. Ezek az alábbiak:");
+            //foreach (var item in dis_lambda)
+            //{
+                //Console.WriteLine($"\t{item}");
+            //}
+
             Console.ReadKey();
         }
     }
